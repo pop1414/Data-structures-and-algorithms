@@ -2,7 +2,7 @@
 #include <vector>
 
 template <typename T>
-class BinaryTree//二叉树类，，
+class BinaryTree // 二叉树类，，
 {
 private:
     struct TreeNode
@@ -12,7 +12,7 @@ private:
         TreeNode *right;
         TreeNode(T val_) : val(val_), left(nullptr), right(nullptr) {};
     };
-
+    ////demo
     TreeNode *root;
 
 public:
@@ -80,33 +80,6 @@ int main()
 {
     std::vector<int> arr;
 
-    // 创建二叉树对象
-    // BinaryTree tree;
-
-    // 插入样例数据
-    // tree.insert(50);
-    // tree.insert(30);
-    // tree.insert(70);
-    // tree.insert(20);
-    // tree.insert(40);
-    // tree.insert(60);
-    // tree.insert(80);
-
-    // // 输出三种遍历序列和层序遍历序列
-    // std::cout << "中序遍历: ";
-    // tree.inorder();
-    // std::cout << std::endl;
-
-    // std::cout << "前序遍历: ";
-    // tree.preorder();
-    // std::cout << std::endl;
-
-    // std::cout << "后序遍历: ";
-    // tree.postorder();
-    // std::cout << std::endl;
-
-    // std::cout << "层序遍历: ";
-    // tree.levelOrder();
-    // std::cout << std::endl;
+    std::cout << 1111;
     return 0;
 }
