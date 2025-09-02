@@ -11,6 +11,7 @@ public:
         int m = matrix.size();
         int n = matrix[0].size();
 
+        //边界统一取值为数组合法下标
         int upper = 0;
         int lower = m - 1;
         int left = 0;
@@ -19,6 +20,8 @@ public:
         int count = n * m;
         while (count > 0)
         {
+            //注意边界范围，左小右大，上小下大
+
             //左至右
             if (left <= right)
             {
@@ -28,7 +31,7 @@ public:
                     cout << matrix[upper][j];
                     count--;
                 }
-                upper++;
+                upper++;//第一行遍历完，上层边界往下移动；其他边界同理
             }
             //上至下
             if (upper <= lower)
