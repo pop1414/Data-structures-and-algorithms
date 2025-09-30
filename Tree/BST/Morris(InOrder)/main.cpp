@@ -47,6 +47,39 @@ public:
             }
         }
     }
+
+    void traverseReverse(TreeNode *root)
+    {
+        int sum = 0;
+        TreeNode *curNode = root;
+        while (curNode != nullptr)
+        {
+            if (curNode->right == nullptr)
+            {
+                cout << curNode->val << "->";
+                curNode = curNode->left;
+            }
+            else
+            {
+                TreeNode *preCur = curNode->right;
+                while (preCur->left != nullptr && preCur->left != curNode)
+                {
+                    preCur = preCur->left;
+                }
+                if (preCur->left == curNode)
+                {
+                    cout << curNode->val << "->";
+                    curNode = curNode->left;
+                    preCur->left = nullptr;
+                }
+                else
+                {
+                    preCur->left = curNode;
+                    curNode = curNode->right;
+                }
+            }
+        }
+    }
 };
 
 // Helper function to create a binary tree
@@ -68,6 +101,9 @@ int main()
 
     cout << "Morris Inorder Traversal: ";
     solution.morrisInOrderTraversal(root);
+    cout << endl;
+    cout << "Morris Inorder Traversal: ";
+    solution.traverseReverse(root);
     cout << endl;
 
     return 0;
