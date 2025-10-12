@@ -153,10 +153,7 @@ private:
         // 找到一个直接返回true
         if (index == pattern.size())
         {
-            if (node->isEnd())
-            {
-                return true;
-            }
+            return node->isEnd();
         }
 
         char c = pattern[index];
