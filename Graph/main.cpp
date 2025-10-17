@@ -240,6 +240,88 @@ public:
 
         return steps;
     }
+
+    int findEulerStart()
+    {
+        unordered_map<int, int> inDegree, outDegree;
+
+        // 记录所有节点的出入度
+        for (const auto &[vertex, neighbors] : adjList)
+        {
+
+            // 初始化哈希表
+            if (inDegree.find(vertex) == inDegree.end())
+            {
+                inDegree[vertex] = 0;
+            }
+            if (outDegree.find(vertex) == outDegree.end())
+            {
+                outDegree[vertex] = 0;
+            }
+
+            outDegree[vertex] += neighbors.size();
+
+            for (const auto &[neighbor, weight] : neighbors)
+            {
+                inDegree[neighbor]++;
+            }
+        }
+
+        auto allVertices = getAllvertices();
+        int oddDegreeCnt = 0; // 无向图中表示奇数度节点，有向图表示入度不等于出度（且diff = 1）
+        int startVertex = -1;
+
+        if (directed)
+        {
+            for (int v : allVertices)
+            {
+                int diff = outDegree[v] - inDegree[v];
+                if (diff == 1)
+                {
+                    oddDegreeCnt++;
+                    startVertex = v; // 出度比入度多一，有可能作为起点
+                }
+                else if (diff == -1)
+                {
+                    oddDegreeCnt++;
+                }
+                else if (diff != 0)
+                {
+                    return -1;
+                }
+            }
+            if (oddDegreeCnt == 0)
+            {
+                return allVertices[0]; // 存在欧拉回路直接返回任意节点
+            }
+            else if (oddDegreeCnt == 2)
+            {
+                return startVertex;
+            }
+        }
+        else
+        {
+            for (int v : allVertices)
+            {
+                // 奇数度节点
+                if (outDegree[v] % 2 == 1)
+                {
+                    startVertex = v;
+                    oddDegreeCnt++;
+                }
+            }
+            if (oddDegreeCnt == 0)
+            {
+                return allVertices[0];
+            }
+            else if (oddDegreeCnt == 2)
+            {
+                return startVertex;
+            }
+        }
+
+        return -1;
+    }
 };
 
 // 示例使用
