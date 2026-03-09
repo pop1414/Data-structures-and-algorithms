@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <string>
 
 using namespace std;
 
@@ -23,32 +24,47 @@ int main(int argc, char *argv[])
     char c;
     cin >> c;
 
-    for (int i = 0; i < round(n / 2); i++)
+    const int total_width = round(n);
+    const int total_height = round(n / 2);
+
+    for (int i = 0; i < total_height; i++)
     {
-        if (i == 0 || i == round(n / 2) - 1)
+        if (i == 0 || i == total_height - 1)
         {
-            for (int j = 0; j < n; j++)
-            {
-                cout << c;
-            }
-            cout << '\n';
+            cout << string(n, c) << '\n';
         }
         else
         {
-            for (int j = 0; j < n; j++)
-            {
-                if (j == 0 || j == n - 1)
-                {
-                    cout << c;
-                }
-                else
-                {
-                    cout << " ";
-                }
-            }
-            cout << '\n';
+            cout << c << string(total_width - 2, ' ') << c << '\n';
         }
     }
+
+    // for (int i = 0; i < round(n / 2); i++)
+    // {
+    //     if (i == 0 || i == round(n / 2) - 1)
+    //     {
+    //         for (int j = 0; j < n; j++)
+    //         {
+    //             cout << c;
+    //         }
+    //         cout << '\n';
+    //     }
+    //     else
+    //     {
+    //         for (int j = 0; j < n; j++)
+    //         {
+    //             if (j == 0 || j == n - 1)
+    //             {
+    //                 cout << c;
+    //             }
+    //             else
+    //             {
+    //                 cout << " ";
+    //             }
+    //         }
+    //         cout << '\n';
+    //     }
+    // }
 
     return 0;
 }
