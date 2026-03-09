@@ -11,6 +11,9 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     if (argc > 1)
     {
         FILE *fp = freopen(argv[1], "r", stdin);
