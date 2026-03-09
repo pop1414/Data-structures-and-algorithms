@@ -1,3 +1,6 @@
+// 10^5 = 100000
+// 注意记录编号最大的学校id
+
 #include <iostream>
 #include <vector>
 #include <fstream>

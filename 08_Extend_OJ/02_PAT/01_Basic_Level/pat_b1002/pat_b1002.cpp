@@ -1,4 +1,6 @@
 // n 小于 10^100，远超long long的范围，所以用字符串数组来接收
+// 字符转数字 char c - '0'
+// 数字转字符串 str_num = tostring(num)
 
 #include <fstream>
 #include <iostream>
@@ -21,7 +23,6 @@ int main(int argc, char *argv[])
 
     string pinyin[] = {"ling", "yi", "er", "san", "si", "wu", "liu", "qi", "ba", "jiu"};
 
-    // 定义长度101的字符数组，足够存100位数字 + \0
     string n;
 
     cin >> n;
