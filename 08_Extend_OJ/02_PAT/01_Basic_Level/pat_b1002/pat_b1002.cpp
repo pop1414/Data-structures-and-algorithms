@@ -6,17 +6,6 @@
 
 using namespace std;
 
-void redirect_input(char *file_path)
-{
-    FILE *fin = freopen(file_path, "r", stdin);
-
-    if (fin == NULL)
-    {
-        printf("WRONG!");
-        exit(1);
-    }
-}
-
 int main(int argc, char *argv[])
 {
     // 核心优化：关闭cin与stdio的同步，解除cin/cout与C流的绑定
@@ -27,7 +16,7 @@ int main(int argc, char *argv[])
 
     if (argc > 1)
     {
-        redirect_input(argv[1]);
+        freopen(argv[1], "r", stdin);
     }
 
     string pinyin[] = {"ling", "yi", "er", "san", "si", "wu", "liu", "qi", "ba", "jiu"};
