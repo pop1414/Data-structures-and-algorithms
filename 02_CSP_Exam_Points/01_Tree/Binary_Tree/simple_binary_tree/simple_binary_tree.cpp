@@ -33,6 +33,11 @@ void deleteTree(TreeNode<T> *root)
     delete root;
 }
 
+// 前中后序遍历都算作DFS，先深入子树，再回溯
+// 层序遍历算作BFS，通过队列控制层级
+// DFS适用于寻找所有路径
+// BFS适用于寻找最短路径
+// DFS只有遍历完所有节点后，算法才会结束；而BFS在遍历到第一个叶节点时就结束算法了
 template <typename T>
 void preOrder(TreeNode<T> *root)
 {
