@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-
+        // 记录字母的权重
         vector<long long> weights(26, 0);
 
         for (char c : input)
