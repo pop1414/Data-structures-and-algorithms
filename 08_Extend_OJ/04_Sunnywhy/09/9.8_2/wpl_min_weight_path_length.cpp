@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
         min_heap.push(weight);
     }
 
-    int wpl = 0;
+    long long wpl = 0;
     while (min_heap.size() >= 2)
     {
         long long w1 = min_heap.top();

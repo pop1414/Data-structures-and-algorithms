@@ -45,7 +45,7 @@
 
 - 用 `priority_queue` + `greater<>` 作为小根堆。
 - `n=1`时，WPL = 0。因为一堆不需要再操作它
-- 代价可能累加，所以用`long long`更保险
+- 代价可能累加，所以用`long long`更保险(别忘记wpl也要用long long)
 
 ## 复杂度
 
