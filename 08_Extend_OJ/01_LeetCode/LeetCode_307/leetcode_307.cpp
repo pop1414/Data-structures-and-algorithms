@@ -64,34 +64,22 @@ private:
 
     int query(long long l, long long r, int rootIndex, long long qL, long long qR)
     {
-        if (rootIndex == -1)
+        if (rootIndex == -1 || l > qR || r < qL)
         {
             return defaultVal;
         }
 
-        if (qL == l && qR == r)
+        if (l >= qL && r <= qR)
         {
             return tree[rootIndex].val;
         }
 
         long long mid = l + (r - l) / 2;
 
-        // qL与qR的范围还是完整的，mid在区间外
-        if (qR <= mid)
-        {
-            return query(l, mid, tree[rootIndex].leftChildIdx, qL, qR);
-        }
-        else if (qL > mid)
-        {
-            return query(mid + 1, r, tree[rootIndex].rightChildIdx, qL, qR);
-        }
-        // 横跨最主要的区别就是qL与qR的范围变化了（被mid切成了两部分）
-        else
-        {
-            int leftVal = query(l, mid, tree[rootIndex].leftChildIdx, qL, mid);
-            int rightVal = query(mid + 1, r, tree[rootIndex].rightChildIdx, mid + 1, qR);
-            return merger(leftVal, rightVal);
-        }
+        int leftVal = query(l, mid, tree[rootIndex].leftChildIdx, qL, qR);
+        int rightVal = query(mid + 1, r, tree[rootIndex].rightChildIdx, qL, qR);
+
+        return merger(leftVal, rightVal);
     }
 
 public:
