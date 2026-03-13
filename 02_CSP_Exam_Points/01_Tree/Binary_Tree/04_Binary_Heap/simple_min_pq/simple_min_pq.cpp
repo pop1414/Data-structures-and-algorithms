@@ -87,7 +87,7 @@ private:
             int leftIndex = leftChild(node);
             int rightIndex = rightChild(node);
             int minIndex = node;
-            
+
             // 分别于左右子节点进行对比，注意是minIndex与left/rightIndex进行对比
             if (leftIndex <= size && heap[minIndex] > heap[leftIndex])
             {
