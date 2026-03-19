@@ -256,6 +256,87 @@ public:
         return dist;
     }
 
+    // 进行n - 1轮迭代，因为最短路径最多包含n - 1条边（若包含环，正权：肯定不是最优；负权：无最短路径）
+    // 每一轮遍历所有的边，进行松弛操作
+    // 进行第n轮遍历，若还有节点更新，说明图中存在负权环
+    pair<vector<int>, bool> bellman_ford(int start)
+    {
+        int n = graph.size();
+        // 记录距离的数组
+        vector<int> dist(n, INT_MAX);
+        dist[start] = 0;
+
+        for (int round = 0; round < n - 1; round++)
+        {
+            // 算法限制每轮遍历只能走一条边，也就是松弛操作的根据是上一轮的数据
+            // 那我们修改dist_copy的数据，根据dist进行松弛；
+            vector<int> dist_copy = dist;
+
+            bool has_update = false;
+
+            for (int node = 0; node < n; node++)
+            {
+                // 节点不可达，换下一个数组
+                if (dist[node] == INT_MAX)
+                {
+                    continue;
+                }
+
+                for (const auto &edge : graph[node])
+                {
+                    int next_node = edge.to;
+                    int new_dist = dist[node] + edge.weight;
+
+                    // 为何要与dist_copy比较，copy不是改动的数组吗，与变化的数据比较不会出现错误吗
+                    // 只需要确保上一轮的数据不要做变动（new_dist基于dist[node]），而next_node可视为下一轮的数据
+                    // 下一轮的数据在遍历的时候，是属于草稿阶段，可以随意修改，而且要与草稿对比，才知道本轮遍历的时候的最优
+                    // 距离new_dist = 1；new_dist = 2，如果dist[next_node] > 2，用dist来比较，可能无法得到最优的1
+                    if (new_dist < dist_copy[next_node])
+                    {
+                        dist_copy[next_node] = new_dist;
+                        has_update = true;
+                    }
+                }
+            }
+
+            // 同步数组
+            dist = dist_copy;
+            if (!has_update)
+            {
+                break;
+            }
+        }
+
+        bool has_negative_cycle = false;
+        // 最后一轮只要松弛判断出现更小值（说明有负权环），直接break，不用修改dist数据
+        for (int node = 0; node < n; node++)
+        {
+            if (dist[node] == INT_MAX)
+            {
+                continue;
+            }
+
+            for (const auto &edge : graph[node])
+            {
+                int next_node = edge.to;
+                int new_dist = edge.weight + dist[node];
+
+                if (new_dist < dist[next_node])
+                {
+                    has_negative_cycle = true;
+                    break;
+                }
+            }
+
+            if (has_negative_cycle)
+            {
+                break;
+            }
+        }
+
+        return {dist, has_negative_cycle};
+    }
+
     const vector<Edge> &neighbors(int v)
     {
         if (v < 0 || v > graph.size() - 1)
