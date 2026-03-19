@@ -337,6 +337,60 @@ public:
         return {dist, has_negative_cycle};
     }
 
+    pair<vector<int>, bool> SPFA(int start)
+    {
+        int n = graph.size();
+        vector<int> dist(n, INT_MAX);
+
+        queue<int> q;
+        vector<bool> in_queue(n, false);
+        // 记录进队次数，用于检测是否有负权环
+        vector<int> cnt(n, 0);
+
+        dist[start] = 0;
+        q.push(start);
+        in_queue[start] = true;
+        cnt[start]++;
+
+        while (!q.empty())
+        {
+            int curr = q.front();
+            q.pop();
+            in_queue[curr] = false;
+
+            if (dist[curr] != INT_MAX)
+            {
+                continue;
+            }
+
+            for (const auto &edge : graph[curr])
+            {
+                int next_node = edge.to;
+
+                int new_dist = edge.weight + dist[curr];
+
+                if (new_dist < dist[next_node])
+                {
+                    dist[next_node] = new_dist;
+                    if (!in_queue[next_node])
+                    {
+                        q.push(next_node);
+                        in_queue[next_node] = true;
+                        cnt[next_node]++;
+
+                        // next_node入队待更新，要检测入队次数是否超过限定值
+                        if (cnt[curr] >= n)
+                        {
+                            return {dist, true};
+                        }
+                    }
+                }
+            }
+        }
+
+        return {dist, false};
+    }
+
     const vector<Edge> &neighbors(int v)
     {
         if (v < 0 || v > graph.size() - 1)
