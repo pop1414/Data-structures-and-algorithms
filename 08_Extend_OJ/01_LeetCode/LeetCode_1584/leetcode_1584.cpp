@@ -138,6 +138,8 @@ public:
     }
 
 private:
+    // prim要点是点亮各个顶点，所以用vector<vector<Node>> graph(Node: int to, int weight)存储
+    // kruskal要点是排序所有边，所有用vector<Node> edges存储(Node:int from, int to, int weight);
     vector<Node> edges;
     int n;
     int cul_dist(int x1, int y1, int x2, int y2)
