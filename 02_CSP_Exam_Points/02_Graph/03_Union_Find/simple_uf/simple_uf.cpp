@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// 用于无向图
 class UF
 {
 private:
