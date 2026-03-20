@@ -256,6 +256,69 @@ public:
         return dist;
     }
 
+
+    // prim不需要遍历所有
+    int prim(int start)
+    {
+        int n = graph.size();
+
+        int selected_node = 0;
+        int result = 0;
+
+        // 记录每个节点到MST的最小边权
+        vector<int> key(n, INT_MAX);
+        key[start] = 0;
+
+        vector<int> in_mst(n, 0);
+
+        // 最小堆放入的是潜在的下一个被点亮的节点
+        // 按照到mst的距离由小到大排序（最小堆）：贪心算法
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> min_heap;
+        min_heap.push({key[start], start});
+
+        while (!min_heap.empty())
+        {
+            auto [dist2mst, curr] = min_heap.top();
+            min_heap.pop();
+
+            // 若已加入mst或者距离不是最优的，跳过（该节点不应该被加入）
+            // 下面的压入潜在节点已经限定了不在mst中，那为啥从堆中取出来的节点还要再做一次判断
+            // 与dijk类似，curr可能被压入多次，因为距离大，被搁置。点亮其他节点的时候，发现key[curr]还有更小的
+            // 那么curr被压入的次数大于1（也就是之前压入的数据可能是过期的），而取出过期的数据的时候，curr已经在mst中，所以还需要再次判断
+            if (dist2mst > key[curr] || in_mst[curr])
+            {
+                continue;
+            }
+
+            // 点亮一个节点
+            in_mst[curr] = 1;
+            selected_node++;
+            result += key[curr];
+
+            // 遍历该节点的边
+            // 看看是否能找到下一个潜在的节点
+            for (const auto &edge : graph[curr])
+            {
+                int next_node = edge.to;
+                int weight = edge.weight;
+
+                // 潜在的节点未被加入，而且距离为已知最优，放入堆中
+                if (in_mst[next_node] == 0 && key[next_node] > weight)
+                {
+                    key[next_node] = weight;
+                    min_heap.push({weight, next_node});
+                }
+            }
+        }
+
+        if (selected_node != n)
+        {
+            return -1;
+        }
+
+        return result;
+    }
+
     // 进行n - 1轮迭代，因为最短路径最多包含n - 1条边（若包含环，正权：肯定不是最优；负权：无最短路径）
     // 每一轮遍历所有的边，进行松弛操作
     // 进行第n轮遍历，若还有节点更新，说明图中存在负权环
