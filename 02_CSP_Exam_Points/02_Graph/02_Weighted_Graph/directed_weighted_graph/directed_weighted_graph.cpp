@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <queue>
+#include <climits>
 
 using namespace std;
 
@@ -256,8 +257,7 @@ public:
         return dist;
     }
 
-
-    // prim不需要遍历所有
+    // prim不需要遍历所有边
     int prim(int start)
     {
         int n = graph.size();
@@ -452,6 +452,57 @@ public:
         }
 
         return {dist, false};
+    }
+
+    bool hasCycleDFS()
+    {
+        int n = graph.size();
+        // 正在访问的路径中的节点集合，如果该集合中某个节点出现两次，说明成环
+        vector<int> onPaths(n, 0);
+        // 防止冗余计算，当先前遍历某个节点发现不成环，当之后遍历其他节点的时候再次访问先前的节点
+        // 就不用再次递归了，因为已经遍历发现不成环了
+        // 判断的时候，onPaths需要在visited前面
+        vector<int> visited(n, 0);
+        bool hasCycle = false;
+
+        auto traverse = [&](auto &self, int node, bool &hasCycle) -> void
+        {
+            if (hasCycle)
+            {
+                return;
+            }
+
+            // 再次访问到该节点，说明成环了
+            if (onPaths[node])
+            {
+                hasCycle = true;
+                return;
+            }
+
+            // 访问的节点不需要再次遍历
+            if (visited[node])
+            {
+                return;
+            }
+
+            // 前序位置，当前节点变成已访问状态
+            onPaths[node] = 1;
+            visited[node] = 1;
+            for (const auto &edge : graph[node])
+            {
+                int next_node = edge.to;
+                self(self, next_node, hasCycle);
+            }
+            // 后续位置，回溯当前节点位置
+            onPaths[node] = 0;
+        };
+
+        for (int node = 0; node < n; node++)
+        {
+            traverse(traverse, node, hasCycle);
+        }
+
+        return hasCycle;
     }
 
     const vector<Edge> &neighbors(int v)
