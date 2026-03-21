@@ -505,6 +505,69 @@ public:
         return hasCycle;
     }
 
+    pair<vector<int>, bool> kahn()
+    {
+        int n = graph.size();
+        vector<int> in_degree(n, 0);
+        int selected_node = 0;
+        bool hasCycle = false;
+
+        vector<int> result;
+
+        // 得出所有节点的入度
+        for (int node = 0; node < n; node++)
+        {
+            for (const auto &edge : graph[node])
+            {
+                int next_node = edge.to;
+                in_degree[next_node]++;
+            }
+        }
+
+        queue<int> q;
+        for (int node = 0; node < n; node++)
+        {
+            // 将所有入度为0的点压入队列
+            if (in_degree[node] == 0)
+            {
+                q.push(node);
+            }
+        }
+        selected_node = q.size();
+
+        // 入度为0，即说明该节点是一个合法的新起点
+        // 当队列无合法的起点时，就说明剩下的节点成环了，无法剥离出一个合法的新节点
+        // 这也是Kahn比DFS快的主要原因，DFS必须要遍历整张图才知道结果，但是如何改图是一个朴素环，那么Kahn就可以直接结束算法
+        while (!q.empty())
+        {
+            int curr = q.front();
+            q.pop();
+            result.push_back(curr);
+
+            for (const auto &edge : graph[curr])
+            {
+                int next_node = edge.to;
+                // 删除curr->next_node的这条边
+                in_degree[next_node]--;
+
+                // 如果被删去边的节点也入度变为0，则加入队列
+                if (in_degree[next_node] == 0)
+                {
+                    q.push(next_node);
+                    selected_node++;
+                }
+            }
+        }
+
+        if (selected_node != n)
+        {
+            hasCycle = true;
+            return {vector<int>(), hasCycle};
+        }
+
+        return {result, hasCycle};
+    }
+
     const vector<Edge> &neighbors(int v)
     {
         if (v < 0 || v > graph.size() - 1)
